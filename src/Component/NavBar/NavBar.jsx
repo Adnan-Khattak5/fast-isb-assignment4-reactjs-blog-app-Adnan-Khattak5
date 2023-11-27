@@ -4,30 +4,22 @@ import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import { Link } from 'react-router-dom';
 
 function NavScrollExample() {
   return (
     <Navbar expand="lg" className="bg-primary text-light">
       <Container fluid>
       {/* Hello */}
-        <Navbar.Brand><span className="font-weight-bold text-white display-5">Blogistan</span></Navbar.Brand>
+        <Navbar.Brand><span className="font-weight-bold text-white display-5" style={{ fontFamily: 'Times New Roman', fontSize: '48px' }}>Blogistan</span></Navbar.Brand>
           <Nav
-            className="me-auto my-2 my-lg-0"
+            className="ml-auto"
             style={{ maxHeight: '100px' }}
             navbarScroll
           >
-            <Nav.Link className="text-light">Home</Nav.Link>
-            <Nav.Link className="text-light">Link</Nav.Link>
+            <Nav.Link as={Link} to="/login" className="text-light" style={{ fontFamily: 'Times New Roman', fontSize: '24px' }}>Login</Nav.Link>
+            <Nav.Link as={Link} to="/signup" className="text-light" style={{ fontFamily: 'Times New Roman', fontSize: '24px' }}>Signup</Nav.Link>
           </Nav>
-          {/* <Form className="d-flex">
-            <Form.Control
-              type="search"
-              placeholder="Search"
-              className="me-2"
-              aria-label="Search"
-            />
-            <Button variant="outline-success" className="text-light">Search</Button>
-          </Form> */}
       </Container>
     </Navbar>
   );

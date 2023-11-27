@@ -12,7 +12,7 @@ const App = () => {
 			{user && <Route path="/posts" exact element={<><NavBar /> <BlogList /></>} />}
 			<Route path="/signup" exact element={<Signup />} />
 			<Route path="/login" exact element={<Login />} />
-			<Route path="/" element={<Navigate replace to="/login" />} />
+			<Route path="/" element={<Navigate replace to="/posts" />} />
 		</Routes>
     </BrowserRouter>
   );

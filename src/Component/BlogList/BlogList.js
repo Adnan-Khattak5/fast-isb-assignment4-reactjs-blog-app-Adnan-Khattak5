@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { Form, Button, Pagination, Row, Col } from 'react-bootstrap';
 import './App.css';
-import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 
 const BlogList = () => {
@@ -8,16 +8,18 @@ const BlogList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredBlogPosts, setFilteredBlogPosts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchBlogPosts = async () => {
       try {
-        const response = await fetch('http://localhost:3000/usser/posts');
-        const data = await response.json();
-
-        if (response.ok) {
+        const response = await axios.get(`http://localhost:3000/usser/posts?page=${currentPage}`);
+        const data = response.data;
+  
+        if (response.status === 200) {
           setBlogPosts(data.blogPosts);
+          setTotalPages(data.totalPages);
         } else {
           setError(data.message);
         }
@@ -27,9 +29,11 @@ const BlogList = () => {
         setIsLoading(false);
       }
     };
-
+  
     fetchBlogPosts();
-  }, []);
+  }, [currentPage]);
+  
+  
 
   const handleCommentSubmit = (postId, commentContent) => {
     // Send the comment to the server and update the blog post with the new comment
@@ -40,12 +44,12 @@ const BlogList = () => {
     try {
       const response = await axios.get(`http://localhost:3000/usser/search?q=${query}`);
       const data = response.data;
-      console.log(response.data);
+
       if (response.status === 200) {
         setBlogPosts(data.blogPosts);
-        //console.log(data.blogPosts)
+        setTotalPages(data.totalPages);
       } else {
-        setBlogPosts("No record Match")
+        setBlogPosts("No record Match");
         setError(data.message);
       }
     } catch (error) {
@@ -55,8 +59,15 @@ const BlogList = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setCurrentPage(1);
     handleSearch(searchQuery);
   };
+
+  const handlePageChange = (page) => {
+    console.log('Page changed to:', page);
+    setCurrentPage(page);
+  };
+  
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -67,24 +78,24 @@ const BlogList = () => {
   }
 
   return (
+    <>
+      <div className="centered-container">
+        <Form onSubmit={handleSubmit} className="d-flex">
+          <Form.Control
+            type="search"
+            placeholder="Search"
+            className="me-2"
+            aria-label="Search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <Button type="submit" variant="outline-success" className="text-light">
+            Search
+          </Button>
+        </Form>
+      </div>
 
-    <div>
-    <Form onSubmit={handleSubmit} className="d-flex">
-      <Form.Control
-        type="search"
-        placeholder="Search"
-        className="me-2"
-        aria-label="Search"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
-      <Button type="submit" variant="outline-success" className="text-light">
-        Search
-      </Button>
-    </Form>
-
-
-    <div className="blog-container">
+      <div className="blog-container">
       {blogPosts.map((post) => (
         <div className="blog-post" key={post.id}>
           <h2 className="blog-post-title">{post.title}</h2>
@@ -119,8 +130,24 @@ const BlogList = () => {
         </div>
       ))}
     </div>
-    </div>
+
+      <Row className="justify-content-center mt-3">
+        <Col xs="auto">
+          <Pagination>
+            {[...Array(totalPages).keys()].map((page) => (
+              <Pagination.Item
+                key={page + 1}
+                active={page + 1 === currentPage}
+                onClick={() => handlePageChange(page + 1)}
+              >
+                {page + 1}
+              </Pagination.Item>
+            ))}
+          </Pagination>
+        </Col>
+      </Row>
+    </>
   );
 };
 
-export default BlogList; 
+export default BlogList;
