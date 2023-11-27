@@ -89,7 +89,7 @@ const BlogList = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <Button type="submit" variant="outline-success" className="text-light">
+          <Button type="submit" className="text-light">
             Search
           </Button>
         </Form>

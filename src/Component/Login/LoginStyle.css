@@ -7,6 +7,11 @@
 	justify-content: center;
 }
 
+.role_radio_group {
+	margin-top: 10px;
+	
+  }
+
 .error_msg {
 	width: 370px;
 	padding: 15px;
