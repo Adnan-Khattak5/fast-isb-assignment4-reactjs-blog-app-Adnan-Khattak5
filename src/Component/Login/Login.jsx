@@ -54,7 +54,11 @@ const Login = () => {
 		console.log(responseData);
   
 		localStorage.setItem("token", responseData.token);
-		navigate("/posts");
+		if(role === 'user')
+		navigate("/user/posts");
+		else{
+		navigate("/admin/posts")
+		}
 	  } else {
 		console.log(responseData.Message);
 	  }

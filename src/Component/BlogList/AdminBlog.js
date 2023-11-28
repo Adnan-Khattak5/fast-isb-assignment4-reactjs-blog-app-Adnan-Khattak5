@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Button, Pagination, Row, Col } from 'react-bootstrap';
 import './App.css';
+import './UserBlogCss.css'
 import axios from 'axios';
 
 const BlogList = () => {
